@@ -27,19 +27,33 @@ function addDecimal() {
   }
 }
 
+// Calculate first and second values depending on operator
+const calculate = {
+  '/': (firstNumber, secondNumber) => firstNumber / secondNumber,
+  '*': (firstNumber, secondNumber) => firstNumber * secondNumber,
+  '+': (firstNumber, secondNumber) => firstNumber + secondNumber,
+  '-': (firstNumber, secondNumber) => firstNumber - secondNumber,
+  '=': (firstNumber, secondNumber) => secondNumber
+}
+
 function useOperator(operator) {
   const currentValue = Number(calculatorDispslay.textContent);
+  // Prevent multiple operators
+  if (operatorValue && awaitingNextVlaue) {
+    operatorValue = operator;
+    return;
+  };
   // Assign firstValue if no value
   if (!firstValue) {
     firstValue = currentValue;
   } else {
-    console.log('currentValue', currentValue);
+    const calculation = calculate[operatorValue](firstValue, currentValue);
+    calculatorDispslay.textContent = calculation;
+    firstValue = calculation;
   }
   // Ready for next value, store operator
   awaitingNextVlaue = true;
   operatorValue = operator;
-  console.log('firstValue', firstValue);
-  console.log('operator', operatorValue);
 }
 
 // Add Event Listeners for numbers, operators, and decimal buttons
